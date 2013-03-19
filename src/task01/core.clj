@@ -21,9 +21,9 @@ The link from the example above is 'https://github.com/clojure/clojure'.
 Example: ['https://github.com/clojure/clojure', 'http://clojure.com/', . . .]
 "
  (let [data (parse "clojure_google.html")]
-          (vec (remove nil? (flatten
-           ((fn fdd[x]  (map #(if (coll? %) (if (and (= (first %) :h3) (= (:class (get % 1)) "r"))
-              (:href (get (get % 2) 1)) (fdd %))) x)) data))))))
+      (letfn [(fdd [x]  (map #(if  (coll? %) (if (and (= (first %) :h3) (= (:class (get % 1)) "r"))
+              (:href (get (get % 2) 1)) (fdd %))) x))]
+       (vec (remove nil? (flatten  (fdd data)))))))
 
 (defn -main []
   (println (str "Found " (count (get-links)) " links!")))
