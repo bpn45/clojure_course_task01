@@ -20,8 +20,12 @@ The link from the example above is 'https://github.com/clojure/clojure'.
 
 Example: ['https://github.com/clojure/clojure', 'http://clojure.com/', . . .]
 "
-  (let [data (parse "clojure_google.html")]
-    nil))
+ (def resv (atom []))
+ (let [data (parse "clojure_google.html")]
+          ((fn fdd[x]  (doseq [y x] (if (coll? y) (if (and (= (first y) :h3) (= (:class (get y 1)) "r"))
+             (swap! resv conj (:href (get (get y 2) 1))) (fdd y))) x)) data))
+               @resv)
+
 
 (defn -main []
   (println (str "Found " (count (get-links)) " links!")))
